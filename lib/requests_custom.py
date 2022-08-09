@@ -1,4 +1,5 @@
 import allure
+import httpretty
 import requests
 
 from lib.logger import Logger
@@ -10,14 +11,15 @@ class CustomRequests:
     # allure serve test_results
 
     @staticmethod
-    def post(url: str, data: dict = None, headers: dict = None, cookies: dict = None):
-        with allure.step(f"POST request to URL: {url}"):
-            return CustomRequests._send(url, data, headers, cookies, 'POST')
-
-    @staticmethod
     def get(url: str, data: dict = None, headers: dict = None, cookies: dict = None):
         with allure.step(f"GET request to URL: {url}"):
             return CustomRequests._send(url, data, headers, cookies, 'GET')
+
+    @staticmethod
+    def post(url: str, data: dict = None, headers: dict = None, cookies: dict = None):
+
+        with allure.step(f"POST request to URL: {url}"):
+            return CustomRequests._send(url, data, headers, cookies, 'POST')
 
     @staticmethod
     def put(url: str, data: dict = None, headers: dict = None, cookies: dict = None):
@@ -32,7 +34,8 @@ class CustomRequests:
     @staticmethod
     def _send(url: str, data: dict, headers: dict, cookies: dict, method: str):
 
-        url = f"https://TEEST{url}"
+        base_url = "https://reqres.in/"
+        url = f"https://reqres.in/{url}"
 
         if headers is None:
             headers = {}
@@ -42,12 +45,18 @@ class CustomRequests:
         Logger.add_request(url, data, headers, cookies, method)
 
         if method == 'GET':
+            httpretty.register_uri(httpretty.GET, uri=base_url, body=data)
             response = requests.get(url, data=data, headers=headers, cookies=cookies)
         elif method == 'POST':
+            httpretty.register_uri(httpretty.POST, uri=base_url, body=data)
             response = requests.post(url, data=data, headers=headers, cookies=cookies)
         elif method == 'PUT':
+            httpretty.register_uri(httpretty.PUT, uri=base_url, body=data)
             response = requests.put(url, data=data, headers=headers, cookies=cookies)
         elif method == 'DELETE':
+            httpretty.register_uri(httpretty.DELETE, uri=base_url, body=data)
             response = requests.delete(url, data=data, headers=headers, cookies=cookies)
         else:
             raise Exception(f"Bad HTTP method '{method}' was received")
+
+        return response
