@@ -1,13 +1,13 @@
 import datetime
 import os
+from pathlib import Path
 
 from requests import Response
 
 
 class Logger:
-    file_name = \
-        f"logs/log_" +\
-        str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + ".log"
+    txt_path = Path("logs/")
+    file_name = f"{txt_path}log_" + str(datetime.datetime.now().strftime("%Y-%m-%d_%H-%M-%S")) + ".log"
 
     @classmethod
     def _write_log_to_file(cls, data: str):
@@ -15,7 +15,7 @@ class Logger:
             logger_file.write(data)
 
     @classmethod
-    def add_request(cls, url: str, data: dict, headers: dict, cookies: dict, method: str):
+    def add_request(cls, url: str, data: str, headers: dict, cookies: dict, method: str):
         test_name = os.environ.get("PYTEST_CURRENT_TEST")
 
         data_to_add = f"\n-----\n"
