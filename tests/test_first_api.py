@@ -3,8 +3,10 @@ from httpretty import HTTPretty
 from httpretty.core import HTTPrettyRequest
 from lib.assertions import Assertions
 from lib.base_case import BaseCase
+import allure
 
 
+@allure.epic("Auth cases")
 class TestUserAuth(BaseCase):
     def setup(self):
         data = {'email': 'sdsd@mail.ru',
@@ -15,7 +17,7 @@ class TestUserAuth(BaseCase):
         self.token = self.get_header(response, "x-csrf-token")
         self.user_id_from_auth_method = self.get_json_value(response, "user_id")
 
-
+    @allure.description("Positive auth user")
     def test_auth_user(self):
         response = requests.get("URL",
                                 headers={"x-csrf-token": self.token},
