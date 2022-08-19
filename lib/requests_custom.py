@@ -1,14 +1,34 @@
+import json
+
 import allure
 import httpretty
 import requests
 
 from lib.logger import Logger
+from util.harness import Util
 
 
 class CustomRequests:
 
     # python -m pytest --alluredir=test_results/ tests/test_user_auth.py
     # allure serve test_results
+    @staticmethod
+    def send_http_request(url: str, file_name: str, key_from_data: str):
+        if 'GET' in Util.read_url_from_json():
+            read_body = Util.read_json_from_file(file_name)
+            response_from_service = CustomRequests.get(url, json.dumps(read_body[key_from_data]))
+        elif 'POST' in Util.read_url_from_json():
+            read_body = Util.read_json_from_file(file_name)
+            response_from_service = CustomRequests.post(url, json.dumps(read_body[key_from_data]))
+        elif 'PUT' in Util.read_url_from_json():
+            read_body = Util.read_json_from_file(file_name)
+            response_from_service = CustomRequests.put(url, json.dumps(read_body[key_from_data]))
+        elif 'DELETE' in Util.read_url_from_json():
+            read_body = Util.read_json_from_file(file_name)
+            response_from_service = CustomRequests.delete(url, json.dumps(read_body[key_from_data]))
+        else:
+            raise Exception(f"Bad HTTP method was received")
+        return response_from_service
 
     @staticmethod
     def get(url: str, data: str = None, headers: dict = None, cookies: dict = None):
@@ -16,18 +36,18 @@ class CustomRequests:
             return CustomRequests._send(url, data, headers, cookies, 'GET')
 
     @staticmethod
-    def post(url: str, data: dict = None, headers: dict = None, cookies: dict = None):
+    def post(url: str, data: str = None, headers: dict = None, cookies: dict = None):
 
         with allure.step(f"POST request to URL: {url}"):
             return CustomRequests._send(url, data, headers, cookies, 'POST')
 
     @staticmethod
-    def put(url: str, data: dict = None, headers: dict = None, cookies: dict = None):
+    def put(url: str, data: str = None, headers: dict = None, cookies: dict = None):
         with allure.step(f"GET request to PUT: {url}"):
             return CustomRequests._send(url, data, headers, cookies, 'PUT')
 
     @staticmethod
-    def delete(url: str, data: dict = None, headers: dict = None, cookies: dict = None):
+    def delete(url: str, data: str = None, headers: dict = None, cookies: dict = None):
         with allure.step(f"GET request to DELETE: {url}"):
             return CustomRequests._send(url, data, headers, cookies, 'DELETE')
 
@@ -42,9 +62,6 @@ class CustomRequests:
             cookies = {}
 
         Logger.add_request(url, data, headers, cookies, method)
-        # httpretty.register_uri(httpretty.GET,
-        #                        uri="https://reqres.in/api/users/2/",
-        #                        body=json.dumps(read_body['data']))
         if method == 'GET':
             httpretty.register_uri(httpretty.GET, uri=url, body=data)
             response = requests.get(url, data=data, headers=headers, cookies=cookies)

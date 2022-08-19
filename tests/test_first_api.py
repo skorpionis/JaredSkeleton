@@ -15,6 +15,24 @@ from util.harness import Util
 class TestUserAuth(BaseCase):
 
     @httpretty.activate(allow_net_connect=False)
+    def test_new1(self):
+        key = 'data'
+        response = CustomRequests.send_http_request("https://reqres.in/api/users/2/",
+                                                    f'{key}.json',
+                                                    key)
+        Assertions.assert_json_has_key(response, 'id')
+        Assertions.assert_code_status(response, 200)
+
+        data = json.loads(response.text)
+        # assert data == read_body['data']
+
+        httpretty.disable()
+        httpretty.reset()
+
+
+
+
+    @httpretty.activate(allow_net_connect=False)
     def test_new(self):
         read_body = Util.read_json_from_file('data.json')
         httpretty.register_uri(httpretty.GET,
@@ -31,7 +49,8 @@ class TestUserAuth(BaseCase):
     def test_new(self):
         read_body = Util.read_json_from_file('data.json')
 
-        response = CustomRequests.get("https://reqres.in/api/users/2/", json.dumps(read_body['data']))
+        response = CustomRequests.get("https://reqres.in/api/users/2/",
+                                      json.dumps(read_body['data']))
         data = json.loads(response.text)
         assert data == read_body['data']
 

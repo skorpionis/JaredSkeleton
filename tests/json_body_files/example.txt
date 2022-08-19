@@ -1,0 +1,13 @@
+POST /api/views.publish HTTP/1.1
+accept-encoding: identity
+content-type: application/json;charset=utf-8
+user-agent: Python/3.10.4 slackclient/3.16.2 Darwin/21.5.0
+connection: close
+
+"{\"user_id\": \"U038J2TRE5R\", \"view\": {\"blocks\": [{\"text\": {\"emoji\": true, \"text\": \"Recruitment section\", \"type\": \"plain_text\"}, \"type\": \"header\"}, {\"text\": {\"text\": \"Find available interviewers, book them for interviews and view your upcoming bookings\", \"type\": \"mrkdwn\"}, \"type\": \"section\"}, {\"elements\": [{\"action_id\": \"find_interviewers_button\", \"text\": {\"emoji\": true, \"text\": \"\\ud83d\\udd0d Find interviewers\", \"type\": \"plain_text\"}, \"type\": \"button\"}, {\"action_id\": \"review_booked_slots_button\", \"text\": {\"emoji\": true, \"text\": \"\\ud83d\\uddc4 Review booked slots\", \"type\": \"plain_text\"}, \"type\": \"button\"}, {\"action_id\": \"recruiter_capabilities_button\", \"text\": {\"emoji\": true, \"text\": \"\\ud83d\\uddc2 My Capabilities\", \"type\": \"plain_text\"}, \"type\": \"button\"}, {\"action_id\": \"hot_request_button\", \"text\": {\"emoji\": true, \"text\": \"\\ud83d\\udd25 Hot Request\", \"type\": \"plain_text\"}, \"type\": \"button\"}], \"type\": \"actions\"}, {\"type\": \"divider\"}, {\"text\": {\"text\": \"Section for my colleagues.\", \"type\": \"mrkdwn\"}, \"type\": \"section\"}, {\"elements\": [{\"action_id\": \"send_feedback_button\", \"text\": {\"emoji\": true, \"text\": \"\\ud83d\\udcee Feedback or Defect\", \"type\": \"plain_text\"}, \"type\": \"button\"}, {\"action_id\": \"become_interviewer_button\", \"text\": {\"emoji\": true, \"text\": \"\\ud83d\\udcef Become interviewer\", \"type\": \"plain_text\"}, \"type\": \"button\"}, {\"action_id\": \"help_button\", \"text\": {\"emoji\": true, \"text\": \"\\u2139\\ufe0f Help\", \"type\": \"plain_text\"}, \"type\": \"button\"}], \"type\": \"actions\"}, {\"elements\": [{\"text\": \"*Version:* 2.5.0\", \"type\": \"mrkdwn\"}], \"type\": \"context\"}], \"type\": \"home\"}}"
+
+-----
+
+HTTP/1.1 200 OK
+
+"{\"ok\":true}"
