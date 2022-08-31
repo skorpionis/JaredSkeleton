@@ -8,6 +8,7 @@ from lib.assertions import Assertions
 from lib.base_case import BaseCase
 from lib.requests_custom import CustomRequests
 from util.harness import Util
+from httpretty.core import fakesock
 
 
 @allure.epic("Auth cases")
@@ -16,6 +17,7 @@ class TestUserAuth(BaseCase):
 
     @httpretty.activate(allow_net_connect=False)
     def test_new1(self):
+
         key = 'data'
         response = CustomRequests.send_http_request("https://reqres.in/api/users/2/",
                                                     f'{key}.json',
@@ -28,9 +30,6 @@ class TestUserAuth(BaseCase):
 
         httpretty.disable()
         httpretty.reset()
-
-
-
 
     @httpretty.activate(allow_net_connect=False)
     def test_new(self):
